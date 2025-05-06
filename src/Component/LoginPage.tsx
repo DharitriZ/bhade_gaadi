@@ -1,0 +1,89 @@
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import phoneCall from '../Assets/phone-call.png';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
+
+function LoginPage() {
+    const navigate = useNavigate();
+
+    return (
+        <div className="w-screen h-screen flex items-center justify-center bg-cyan-500 px-4">
+            <div className="flex w-full max-w-md shadow-xl bg-white justify-center items-center p-10 rounded-2xl">
+                <Formik
+                    initialValues={{ phoneNo: '' }}
+                    validationSchema={Yup.object({
+                        phoneNo: Yup.string()
+                            .required('Phone Number is required')
+                            .test('valid-phone', 'Phone number must be 10 digits after country code', (value) => {
+                                if (!value) return false;
+                                const digitsOnly = value.replace(/\D/g, '');
+                                if (digitsOnly.startsWith('91')) {
+                                    return digitsOnly.length === 12;
+                                }
+                                return true;
+                            }),
+                    })}
+                    onSubmit={(values, { setSubmitting }) => {
+                        setTimeout(() => {
+                            alert(JSON.stringify(values, null, 2));
+                            setSubmitting(false);
+                            navigate('/otp');
+                        }, 400);
+                    }}
+                >
+                    {({
+                        values,
+                        errors,
+                        touched,
+                        handleSubmit,
+                        isSubmitting,
+                        setFieldValue,
+                    }) => (
+                        <form onSubmit={handleSubmit} className="w-full flex flex-col items-center gap-8">
+                            <header className="text-cyan-500 font-serif font-bold text-4xl antialiased">
+                                LOGIN
+                            </header>
+
+                            <img src={phoneCall} alt="Phone Call" className="w-36 h-36" />
+
+                            <div className="w-full flex flex-col gap-2">
+                                <label htmlFor="phoneNo" className="text-gray-700 font-semibold text-lg">
+                                    Phone Number
+                                </label>
+
+                                <PhoneInput
+                                    id="phoneNo"
+                                    defaultCountry="IN"
+                                    value={values.phoneNo}
+                                    onChange={(phone) => setFieldValue('phoneNo', phone)}
+                                    countries={['IN']}
+                                    international={false}
+                                    countryCallingCodeEditable={false}
+                                    className="w-full bg-gray-100 p-4 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 text-lg border-white"
+                                />
+
+
+                                {errors.phoneNo && touched.phoneNo && (
+                                    <div className="text-red-500 text-sm">{errors.phoneNo}</div>
+                                )}
+                            </div>
+
+                            <button
+                                type="submit"
+                                className="w-full py-3 bg-cyan-500 text-white font-semibold rounded-md hover:bg-cyan-600 transition duration-300 disabled:opacity-50"
+                                disabled={isSubmitting}
+                            >
+                                NEXT
+                            </button>
+                        </form>
+                    )}
+                </Formik>
+            </div>
+        </div>
+    );
+}
+
+export default LoginPage;
