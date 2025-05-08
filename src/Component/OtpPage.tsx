@@ -1,11 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import otplogo from '../Assets/password.png';
 
 const OtpPage = () => {
     const [otp, setOtp] = useState(Array(6).fill(''));
     const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
     const [resendTimer, setResendTimer] = useState(30);
+    const navigate = useNavigate();
 
+    // Countdown timer for resend
     useEffect(() => {
         let timer: NodeJS.Timeout;
         if (resendTimer > 0) {
@@ -14,6 +17,30 @@ const OtpPage = () => {
         return () => clearTimeout(timer);
     }, [resendTimer]);
 
+    // Auto-redirect when OTP fully entered
+    useEffect(() => {
+        if (otp.every((digit) => digit !== '')) {
+            const enteredOtp = otp.join('');
+            console.log("Entered OTP:", enteredOtp);
+
+            // Simulate OTP Verification (Optional)
+            setTimeout(() => {
+                // Example: If OTP is "123456", you can verify here
+                if (enteredOtp === "123456") {
+                    navigate('/Dashboard');
+                } else {
+                    alert('Invalid OTP');
+                    setOtp(Array(6).fill(''));
+                    inputsRef.current[0]?.focus();
+                }
+
+                // For now, redirect directly
+                navigate('/Dashboard');
+            }, 500);
+        }
+    }, [otp, navigate]);
+
+    // Handle typing in OTP inputs
     const handleChange = (element: HTMLInputElement, index: number) => {
         const value = element.value;
         if (/^[0-9]$/.test(value)) {
@@ -27,6 +54,7 @@ const OtpPage = () => {
         }
     };
 
+    // Handle Backspace
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
         if (e.key === 'Backspace') {
             if (otp[index]) {
@@ -42,6 +70,7 @@ const OtpPage = () => {
         }
     };
 
+    // Handle Paste
     const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
         e.preventDefault();
         const pastedData = e.clipboardData.getData('text').trim();
@@ -58,11 +87,13 @@ const OtpPage = () => {
         }
     };
 
+    // Clear all OTP inputs
     const handleClear = () => {
         setOtp(Array(6).fill(''));
         inputsRef.current[0]?.focus();
     };
 
+    // Resend OTP logic
     const handleResend = () => {
         console.log("Resending OTP...");
         setOtp(Array(6).fill(''));
@@ -77,6 +108,7 @@ const OtpPage = () => {
                 <h2 className="text-3xl font-extrabold text-cyan-500 mb-4 tracking-wide">OTP Verification</h2>
                 <img src={otplogo} alt="OTP Logo" className="w-24 h-24 mb-6" />
 
+                {/* OTP Inputs */}
                 <div className="flex justify-center gap-3 mb-6">
                     {otp.map((data, index) => (
                         <input
