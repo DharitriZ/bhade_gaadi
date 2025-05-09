@@ -5,17 +5,27 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { AdminProvider } from './context/AdminContext';
+import { persistor, store } from './Redux/Store'
+import { Provider } from 'react-redux'
+import { Toaster } from 'react-hot-toast';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <AdminProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </AdminProvider>
+
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <AdminProvider>
+          <BrowserRouter>
+            <App />
+            <Toaster />
+          </BrowserRouter>
+        </AdminProvider>
+      </PersistGate>
+    </Provider>
   </React.StrictMode>
 );
 

@@ -74,7 +74,7 @@ const Sidebar: React.FC = () => {
 
                         <div className="flex-1 py-6 px-2 overflow-y-auto">
                             <SidebarLink
-                                to="/Dashboard"
+                                to="/"
                                 icon={<LayoutDashboard size={20} />}
                                 label="Dashboard"
                                 isCollapsed={isCollapsed}

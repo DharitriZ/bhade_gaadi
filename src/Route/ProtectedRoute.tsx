@@ -11,10 +11,10 @@ function ProtectedRoute() {
         <div className="appdiv">
             <Routes>
                 <Route element={<PrivateRoutes />}>
-                    <Route path="/Dashboard" element={<Dashboard />} />
+                    <Route path="/" element={<Dashboard />} />
                     <Route path="/User-requests" element={<UserRequest />} />
                 </Route>
-                <Route path="/" element={<LoginPage />} />
+                <Route path="/login" element={<LoginPage />} />
                 <Route path="/otp" element={<OtpPage />} />
             </Routes>
         </div>

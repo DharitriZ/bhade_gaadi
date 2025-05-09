@@ -5,12 +5,38 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
+import { LoginApi } from '../Apis/Api';
+import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { loginThunk, setSession } from '../Redux/Slices/AuthSlice';
+import { useAppDispatch } from '../Redux/hooks';
 
 function LoginPage() {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+
+
+    const handleLogin = async (phoneNo: string) => {
+        try {
+            const resultAction = await dispatch(loginThunk(phoneNo));
+
+            // resultAction will have payload or error
+            if (loginThunk.fulfilled.match(resultAction)) {
+                toast.success('OTP sent successfully');
+
+                navigate('/otp');
+            } else {
+                toast.error('Login failed');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            toast.error('Something went wrong.');
+        }
+    };
+
 
     return (
-        <div className="w-screen h-screen flex items-center justify-center bg-cyan-500 px-4">
+        <div className="w-screen h-screen flex items-center justify-center bg-cyan-600 px-4">
             <div className="flex w-full max-w-md shadow-xl bg-white justify-center items-center p-10 rounded-2xl">
                 <Formik
                     initialValues={{ phoneNo: '' }}
@@ -26,12 +52,10 @@ function LoginPage() {
                                 return true;
                             }),
                     })}
-                    onSubmit={(values, { setSubmitting }) => {
-                        setTimeout(() => {
-                            alert(JSON.stringify(values, null, 2));
-                            setSubmitting(false);
-                            navigate('/otp');
-                        }, 400);
+                    onSubmit={async (values, { setSubmitting }) => {
+                        console.log(values.phoneNo.slice(3));
+                        await handleLogin(values.phoneNo.slice(3));
+                        setSubmitting(false);
                     }}
                 >
                     {({

@@ -30,7 +30,7 @@ const RequestCard: React.FC<RequestCardProps> = ({ request, onStatusUpdate }) =>
   };
 
   return (
-    <div className="bg-white border-cyan-500 rounded-lg shadow-md shadow-cyan-500 overflow-hidden hover:shadow-lg p-2 transition-all">
+    <div className="bg-white border-cyan-700 rounded-lg shadow-md shadow-cyan-500 overflow-hidden hover:shadow-lg p-2 transition-all">
       <div className="p-4 border-b flex justify-between items-start">
         <div>
           <h3 className="font-medium">{request.username}</h3>
