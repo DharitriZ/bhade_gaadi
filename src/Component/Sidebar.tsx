@@ -44,59 +44,61 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({
 };
 
 const Sidebar: React.FC = () => {
-    const [isCollapsed, setCollapsed] = useState(window.innerWidth < 768);
+    const [isCollapsed, setCollapsed] = useState(window.innerWidth < 500);
 
     return (
         <>
             {/* Mobile overlay when sidebar is open */}
             {!isCollapsed && (
-                <div
-                    className="md:hidden fixed inset-0 bg-black/50 z-20"
-                    onClick={() => setCollapsed(true)}
-                />
-            )}
+                <>
+                    <div
+                        className="md:hidden fixed inset-0 bg-black/50 z-20"
+                        onClick={() => setCollapsed(true)}
+                    />
 
-            <aside
-                className={`fixed md:sticky top-0 h-screen bg-cyan-700 text-white z-30 transition-all duration-300 flex flex-col ${isCollapsed ? 'w-16' : 'w-64'
-                    }`}
-            >
-                <div className="flex items-center justify-between h-16 px-4 border-b border-cyan-800">
-                    {!isCollapsed && (
-                        <h1 className="text-xl font-bold">Admin Panel</h1>
-                    )}
-                    <button
-                        onClick={() => setCollapsed(!isCollapsed)}
-                        className="p-2 rounded-lg hover:bg-cyan-900 transition-colors"
+                    <aside
+                        className={`fixed md:sticky top-0 h-screen bg-cyan-700 text-white z-30 transition-all duration-300 flex flex-col ${isCollapsed ? 'w-16' : 'w-64'
+                            }`}
                     >
-                        {isCollapsed ? <ChevronRight size={20} /> : <X size={20} />}
-                    </button>
-                </div>
-
-                <div className="flex-1 py-6 px-2 overflow-y-auto">
-                    <SidebarLink
-                        to="/Dashboard"
-                        icon={<LayoutDashboard size={20} />}
-                        label="Dashboard"
-                        isCollapsed={isCollapsed}
-                        setCollapsed={setCollapsed}
-                    />
-                    <SidebarLink
-                        to="/user-requests"
-                        icon={<Users size={20} />}
-                        label="User Requests"
-                        isCollapsed={isCollapsed}
-                        setCollapsed={setCollapsed}
-                    />
-                </div>
-
-                <div className="p-4 border-t border-cyan-900">
-                    {!isCollapsed && (
-                        <div className="text-sm text-cyan-300">
-                            Admin Panel v1.0
+                        <div className="flex items-center justify-between h-16 px-4 border-b border-cyan-800">
+                            {/* {!isCollapsed && ( */}
+                            <h1 className="text-xl font-bold">Admin Panel</h1>
+                            {/* )} */}
+                            <button
+                                onClick={() => setCollapsed(!isCollapsed)}
+                                className="p-2 rounded-lg hover:bg-cyan-900 transition-colors"
+                            >
+                                {/* {isCollapsed ? <ChevronRight size={20} /> : <X size={20} />} */}
+                            </button>
                         </div>
-                    )}
-                </div>
-            </aside>
+
+                        <div className="flex-1 py-6 px-2 overflow-y-auto">
+                            <SidebarLink
+                                to="/Dashboard"
+                                icon={<LayoutDashboard size={20} />}
+                                label="Dashboard"
+                                isCollapsed={isCollapsed}
+                                setCollapsed={setCollapsed}
+                            />
+                            <SidebarLink
+                                to="/user-requests"
+                                icon={<Users size={20} />}
+                                label="User Requests"
+                                isCollapsed={isCollapsed}
+                                setCollapsed={setCollapsed}
+                            />
+                        </div>
+
+                        <div className="p-4 border-t border-cyan-900">
+                            {/* {!isCollapsed && ( */}
+                            <div className="text-sm text-cyan-300">
+                                Admin Panel v1.0
+                            </div>
+                            {/* )} */}
+                        </div>
+                    </aside>
+                </>
+            )}
 
             {/* Mobile toggle button */}
             <button

@@ -10,7 +10,7 @@ function PrivateRoutes() {
 
             <Sidebar />
 
-            <div className="flex-1 h-screen w-screen">
+            <div className="flex-1 px-5 py-2 bg-gray-200 h-screen w-screen">
                 <Outlet />
             </div>
         </div>

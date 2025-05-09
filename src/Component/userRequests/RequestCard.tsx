@@ -30,7 +30,7 @@ const RequestCard: React.FC<RequestCardProps> = ({ request, onStatusUpdate }) =>
   };
 
   return (
-    <div className="bg-white  border-cyan-500 rounded-lg shadow-md shadow-cyan-500 overflow-hidden hover:shadow-lg p-2 transition-all">
+    <div className="bg-white border-cyan-500 rounded-lg shadow-md shadow-cyan-500 overflow-hidden hover:shadow-lg p-2 transition-all">
       <div className="p-4 border-b flex justify-between items-start">
         <div>
           <h3 className="font-medium">{request.username}</h3>
@@ -76,7 +76,7 @@ const RequestCard: React.FC<RequestCardProps> = ({ request, onStatusUpdate }) =>
             <ActionButton label="Reject" icon={XCircle} color="red" onClick={() => openDialog('reject')} />
           </>
         ) : (
-          <ActionButton label="Reset to Pending" icon={Clock} color="gray" onClick={() => onStatusUpdate(request.id, 'pending')} />
+          <ActionButton label="Reset to Pending" icon={Clock} color="cyan" onClick={() => onStatusUpdate(request.id, 'pending')} />
         )}
       </div>
 
@@ -99,7 +99,7 @@ const RequestCard: React.FC<RequestCardProps> = ({ request, onStatusUpdate }) =>
 interface ActionButtonProps {
   label: string;
   icon: React.ElementType;
-  color: 'green' | 'red' | 'gray';
+  color: 'green' | 'red' | 'cyan';
   onClick: () => void;
 }
 

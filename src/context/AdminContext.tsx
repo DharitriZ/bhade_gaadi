@@ -28,7 +28,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const fetchData = async () => {
       setLoading(true);
       try {
-        await new Promise(res => setTimeout(res, 800)); // Fake API delay
+        await new Promise(res => setTimeout(res, 800));
         setUserRequests(mockUserRequests);
       } catch {
         addNotification('Failed to load user requests', 'error');
