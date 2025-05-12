@@ -27,7 +27,7 @@ const Dashboard: React.FC = () => {
     ];
 
     return (
-        <div className="p-6">
+        <div className="sm:p-6 p-0">
             <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
             {loading ? (
                 <p>Loading...</p>

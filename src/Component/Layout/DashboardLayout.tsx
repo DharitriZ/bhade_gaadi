@@ -156,7 +156,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                             />
                         </svg>
                     </button>
-                    <h1 className="ml-4 text-lg font-semibold text-[#1E3A8A]">Bhade Gaadi</h1>
+                    <h1 className="ml-4 text-lg font-semibold text-[#1E3A8A]">Car Rentals</h1>
                 </div>
 
                 {/* Page Content */}
