@@ -6,6 +6,7 @@ import {
     updateCarTypeAction,
     deleteCarTypeAction,
 } from "../actions/carType";
+import { logoutAction } from "../actions/auth";
 
 interface CarTypeState {
     carTypes: CarType[];
@@ -43,6 +44,9 @@ const carTypeSlice = createSlice({
             // Delete car type
             .addCase(deleteCarTypeAction.fulfilled, (state, action: PayloadAction<string>) => {
                 state.carTypes = state.carTypes.filter((ct) => ct.id !== action.payload);
+            })
+            .addCase(logoutAction.fulfilled, () => {
+                return initialState;
             });
     },
 });

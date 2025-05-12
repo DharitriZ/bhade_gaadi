@@ -89,12 +89,21 @@ const OtpPage = () => {
                             <input
                                 id="otp"
                                 name="otp"
-                                type="text"
+                                type="tel"
                                 maxLength={6}
+                                inputMode="numeric"
+                                pattern="[0-9]*"
                                 {...formik.getFieldProps('otp')}
+                                onChange={(e) => {
+                                    let value = e.target.value;
+                                    value = value.replace(/[^0-9]/g, '');
+
+                                    formik.setFieldValue('otp', value);
+                                }}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] text-center text-2xl tracking-widest"
                                 placeholder="000000"
                             />
+
                             {formik.touched.otp && formik.errors.otp && (
                                 <div className="text-red-500 text-sm mt-1">{formik.errors.otp}</div>
                             )}

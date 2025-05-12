@@ -2,6 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { DashboardData } from '../../lib/type/dashboard';
 import { getDashboardAction } from '../actions/dashboard';
+import { logoutAction } from '../actions/auth';
 
 interface DashboardState {
     dashboard: DashboardData | null;
@@ -20,7 +21,9 @@ const dashboardSlice = createSlice({
             .addCase(getDashboardAction.fulfilled, (state, action) => {
                 state.dashboard = action.payload.data;
             })
-
+            .addCase(logoutAction.fulfilled, () => {
+                return initialState;
+            });
     },
 });
 

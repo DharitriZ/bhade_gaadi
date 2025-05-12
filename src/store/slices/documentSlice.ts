@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { PendingDocumentGroup } from '../../lib/type/documents';
 import { getApprovedDocumentsAction, getPendingDocumentsAction, getRejectedDocumentsAction } from '../actions/documents';
+import { logoutAction } from '../actions/auth';
 
 interface PaginationInfo {
     totalCount: number;
     totalPages: number;
     currentPage: number;
 }
-
 
 interface DocumentState {
     pendingDocuments: PendingDocumentGroup[];
@@ -62,6 +62,9 @@ const documentSlice = createSlice({
                 const { data, totalCount, totalPages, currentPage } = action.payload.data;
                 state.rejectedDocuments = data;
                 state.rejectedPagination = { totalCount, totalPages, currentPage };
+            })
+            .addCase(logoutAction.fulfilled, () => {
+                return initialState;
             });
     },
 });

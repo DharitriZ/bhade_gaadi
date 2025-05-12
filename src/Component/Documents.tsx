@@ -15,9 +15,7 @@ export const ReviewDocuments = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
-
-
-    console.log(pendingPagination, 'pendingPagination');
+    const [reviewLoading, setReviewLoading] = useState(false);
 
     // Use useCallback to memoize the debounced search function
     const handleSearch = useCallback(
@@ -28,38 +26,48 @@ export const ReviewDocuments = () => {
         [] // Ensure this is only created once
     );
 
-    const handlePageChange = (newPage: number) => {
+    const handlePageChange = async (newPage: number) => {
         setPage(newPage);
-        dispatch(getPendingDocumentsAction({ search: searchTerm, page: newPage, pageSize: 10 }));
+        setLoading(true);
+        await dispatch(getPendingDocumentsAction({ search: searchTerm, page: newPage, pageSize: 10 }));
+        setLoading(false);
     };
 
-
-    const handleApprove = (docId: string) => {
+    const handleApprove = async (docId: string) => {
+        setReviewLoading(true);
         try {
-            dispatch(reviewDocumentAction({ id: docId, status: "APPROVED" }));
-            dispatch(getPendingDocumentsAction({ search: searchTerm, page: 1, pageSize: 10 }));
+            await dispatch(reviewDocumentAction({ id: docId, status: "APPROVED" }));
+            await dispatch(getPendingDocumentsAction({ search: searchTerm, page: 1, pageSize: 10 }));
             toast.success("Document approved successfully");
         } catch (error) {
             console.error("Error approving document:", error);
             toast.error(error.message || "An error occurred while approving the document");
+        } finally {
+            setReviewLoading(false);
         }
     };
 
-    const handleReject = (docId: string, reason: string) => {
+    const handleReject = async (docId: string, reason: string) => {
+        setReviewLoading(true);
         try {
-            dispatch(reviewDocumentAction({ id: docId, status: "REJECTED", rejectionReason: reason }));
-            dispatch(getPendingDocumentsAction({ search: searchTerm, page: 1, pageSize: 10 }));
+            await dispatch(reviewDocumentAction({ id: docId, status: "REJECTED", rejectionReason: reason }));
+            await dispatch(getPendingDocumentsAction({ search: searchTerm, page: 1, pageSize: 10 }));
             toast.success("Document rejected successfully");
         } catch (error) {
             console.error("Error rejecting document:", error);
             toast.error(error.message || "An error occurred while rejecting the document");
+        } finally {
+            setReviewLoading(false);
         }
-    }
-
+    };
 
     useEffect(() => {
-        // Dispatch to fetch documents initially
-        dispatch(getPendingDocumentsAction({ search: searchTerm, page, pageSize: 10 }));
+        const fetchDocuments = async () => {
+            setLoading(true);
+            await dispatch(getPendingDocumentsAction({ search: searchTerm, page, pageSize: 10 }));
+            setLoading(false);
+        }
+        fetchDocuments();
     }, [dispatch, page]);
 
     return (
@@ -72,7 +80,7 @@ export const ReviewDocuments = () => {
                     value={searchTerm}
                     onChange={(e) => {
                         setSearchTerm(e.target.value);
-                        handleSearch(e.target.value); // Call the debounced search handler
+                        handleSearch(e.target.value);
                     }}
                 />
             </div>
@@ -93,6 +101,7 @@ export const ReviewDocuments = () => {
                         onApprove={handleApprove}
                         onReject={handleReject}
                         status="PENDING"
+                        isLoading={reviewLoading}
                     />
                 ))
             )}

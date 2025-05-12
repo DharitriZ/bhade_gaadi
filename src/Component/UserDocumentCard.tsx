@@ -6,6 +6,7 @@ export type Document = {
     documentType: string;
     documentUrl: string;
     status: string;
+    rejectionReason?: string;
 };
 
 export type User = {
@@ -20,9 +21,10 @@ type Props = {
     onApprove?: (docId: string) => void;
     onReject?: (docId: string, reason: string) => void;
     status: string;
+    isLoading?: boolean;
 };
 
-export const UserDocumentCard: React.FC<Props> = ({ user, onApprove, onReject, status }) => {
+export const UserDocumentCard: React.FC<Props> = ({ user, onApprove, onReject, status, isLoading }) => {
     const [rejectDocId, setRejectDocId] = useState<string | null>(null);
     const [reason, setReason] = useState("");
     const modalRef = useRef<HTMLDivElement | null>(null);
@@ -63,25 +65,7 @@ export const UserDocumentCard: React.FC<Props> = ({ user, onApprove, onReject, s
                         {user.phoneNumber}
                     </div>
                 </div>
-
-                {rejectDocId === null && status === "PENDING" && (
-                    <div className="flex gap-2 sm:pt-0 pt-2">
-                        <button
-                            className="bg-[#1E3A8A] text-white px-3 py-1 rounded hover:bg-green-700 text-sm"
-                            onClick={() => onApprove?.(user.id)} // Approve the whole user card
-                        >
-                            Approve
-                        </button>
-                        <button
-                            className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 text-sm"
-                            onClick={() => setRejectDocId(user.id)} // Trigger reject modal for the user card
-                        >
-                            Reject
-                        </button>
-                    </div>
-                )}
             </div>
-
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 {user.documents.map((doc) => (
@@ -95,15 +79,37 @@ export const UserDocumentCard: React.FC<Props> = ({ user, onApprove, onReject, s
                         >
                             View Document
                         </a>
+
+                        {status === "PENDING" && (
+                            <div className="mt-2 flex gap-2">
+                                <button
+                                    className="bg-[#1E3A8A] text-white px-2 py-1 rounded hover:bg-green-700 text-xs"
+                                    onClick={() => onApprove?.(doc.id)}
+                                    disabled={isLoading}
+                                >
+                                    Approve
+                                </button>
+                                <button
+                                    className="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 text-xs"
+                                    onClick={() => setRejectDocId(doc.id)}
+                                    disabled={isLoading}
+                                >
+                                    Reject
+                                </button>
+                            </div>
+                        )}
+
+                        {doc.status === "REJECTED" && doc.rejectionReason && (
+                            <p className="text-sm text-red-600 mt-2">
+                                Reason: {doc.rejectionReason}
+                            </p>
+                        )}
                     </div>
                 ))}
             </div>
 
-            {/* Only show approve and reject buttons for the entire card */}
-
-
-            {/* Reject modal for the entire user card */}
-            {rejectDocId === user.id && (
+            {/* Reject modal */}
+            {rejectDocId && (
                 <div ref={modalRef} className="mt-3">
                     <textarea
                         placeholder="Reason for rejection"

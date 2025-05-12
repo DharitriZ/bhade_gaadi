@@ -67,6 +67,11 @@ const LoginPage: React.FC = () => {
                                     name="phoneNumber"
                                     type="tel"
                                     maxLength={10}
+                                    onChange={(e) => {
+                                        let value = e.target.value;
+                                        value = value.replace(/[^0-9]/g, '');
+                                        formik.setFieldValue('phoneNumber', value);
+                                    }}
                                     {...formik.getFieldProps('phoneNumber')}
                                     className="pl-12 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A]"
                                     placeholder="Enter 10 digit number"

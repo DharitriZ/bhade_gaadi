@@ -7,7 +7,7 @@ import API from "../../lib/api";
 export const loginUserAction = createAsyncThunk(
     "auth/loginUser",
     withToastForError(async (phoneNumber: any) => {
-        const response = await API.post("/auth/login", { phoneNumber });
+        const response = await API.post("/auth/admin/login", { phoneNumber });
         return response.data
 
     }),
@@ -25,7 +25,7 @@ export const verifyLoginOtpAction = createAsyncThunk(
             sessionId: string;
             otp: string;
         }) => {
-            return await API.post("/auth/verify-login", {
+            return await API.post("/auth/admin/verify-login", {
                 phoneNumber,
                 sessionId,
                 otp,
