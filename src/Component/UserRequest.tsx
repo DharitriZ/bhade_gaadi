@@ -10,12 +10,12 @@ const UserRequests: React.FC = () => {
     const [filteredRequests, setFilteredRequests] = useState<UserRequest[]>([]);
 
     useEffect(() => {
-        const filtered = userRequests.filter(({ username, email, status }) => {
+        const filtered = userRequests.filter(({ username, email }) => {
             const searchMatch = filters.search
                 ? username.toLowerCase().includes(filters.search.toLowerCase()) ||
                 email.toLowerCase().includes(filters.search.toLowerCase())
                 : true;
-            const statusMatch = filters.status === 'all' || status === filters.status;
+            const statusMatch = filters.status === 'all';
             return searchMatch && statusMatch;
         });
         setFilteredRequests(filtered);
@@ -40,7 +40,7 @@ const UserRequests: React.FC = () => {
 
             {filteredRequests.length === 0 ? (
                 <div className="text-center py-12 bg-white rounded-lg shadow-sm">
-                    <p className="text-gray-500">No requests found with the current filters.</p>
+                    <p className=" font-bold text-2xl text-gray-500/50">No requests Pending!</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

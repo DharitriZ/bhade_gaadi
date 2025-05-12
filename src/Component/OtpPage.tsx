@@ -2,9 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import otplogo from '../Assets/password.png';
 import { useAppDispatch, useAppSelector } from '../Redux/hooks';
-import { verifyOtpThunk } from '../Redux/Slices/AuthSlice';
-import { ResendApi } from '../Apis/Api';
 import toast from 'react-hot-toast';
+import { resendOtpThunk, verifyOtpThunk } from '../Redux/Action/AuthAction';
 
 const RESEND_TIMEOUT = 30; // Constant for resend timer
 
@@ -20,7 +19,7 @@ const OtpPage = () => {
     const handleOtpVerification = async (enteredOtp: string) => {
         if (!sessionId || !phoneNumber) {
             toast.error('Session expired. Please login again.');
-            navigate('/');
+            navigate('/login');
             return;
         }
 
@@ -45,24 +44,20 @@ const OtpPage = () => {
 
     const handleResend = async () => {
         try {
+            if (!phoneNumber) {
+                toast.error('Phone number is required.');
+                return;
+            }
+
             setLoading(true);
-            const response = await fetch(ResendApi, {
-                method: 'POST',
-                headers: {
-                    'accept': '*/*',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ phoneNumber }),
-            });
-
-            const data = await response.json();
-
-            if (response.ok && data.status === 200) {
-                toast.success(data.message);
+            const response = dispatch(resendOtpThunk(phoneNumber));
+            if (resendOtpThunk.fulfilled.match(response)) {
+                toast.success('OTP resent successfully!');
                 setResendTimer(RESEND_TIMEOUT);
             } else {
-                toast.error(data.error || 'Failed to resend OTP.');
+                toast.error('Failed to resend OTP. Please try again.');
             }
+
         } catch (error) {
             console.error('Error:', error);
             toast.error('Error resending OTP. Try again.');

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Filter, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 
 interface RequestFiltersProps {
   onFilterChange: (filters: { search: string; status: string }) => void;
@@ -8,24 +8,24 @@ interface RequestFiltersProps {
 const RequestFilters: React.FC<RequestFiltersProps> = ({ onFilterChange }) => {
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('all');
-  const [showFilters, setShowFilters] = useState(false);
-  
+  // const [showFilters, setShowFilters] = useState(false);
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
     onFilterChange({ search: e.target.value, status });
   };
-  
-  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setStatus(e.target.value);
-    onFilterChange({ search, status: e.target.value });
-  };
-  
+
+  // const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   setStatus(e.target.value);
+  //   onFilterChange({ search, status: e.target.value });
+  // };
+
   const clearFilters = () => {
     setSearch('');
     setStatus('all');
     onFilterChange({ search: '', status: 'all' });
   };
-  
+
   return (
     <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
       <div className="flex flex-col sm:flex-row gap-3 items-center">
@@ -41,16 +41,16 @@ const RequestFilters: React.FC<RequestFiltersProps> = ({ onFilterChange }) => {
             className="py-2 pl-10 pr-3 block w-full rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
-        
+
         <div className="flex gap-2 w-full sm:w-auto">
-          <button
+          {/* <button
             onClick={() => setShowFilters(!showFilters)}
             className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
           >
             <Filter size={18} />
             <span className="text-sm font-medium">Filters</span>
-          </button>
-          
+          </button> */}
+
           {(search || status !== 'all') && (
             <button
               onClick={clearFilters}
@@ -62,8 +62,8 @@ const RequestFilters: React.FC<RequestFiltersProps> = ({ onFilterChange }) => {
           )}
         </div>
       </div>
-      
-      {showFilters && (
+
+      {/* {showFilters && (
         <div className="mt-4 pt-4 border-t border-gray-200">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
@@ -84,7 +84,7 @@ const RequestFilters: React.FC<RequestFiltersProps> = ({ onFilterChange }) => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

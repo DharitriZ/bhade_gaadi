@@ -1,15 +1,12 @@
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import phoneCall from '../Assets/phone-call.png';
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
-import { LoginApi } from '../Apis/Api';
 import toast from 'react-hot-toast';
-import { useDispatch } from 'react-redux';
-import { loginThunk, setSession } from '../Redux/Slices/AuthSlice';
 import { useAppDispatch } from '../Redux/hooks';
+import { loginThunk } from '../Redux/Action/AuthAction';
 
 function LoginPage() {
     const navigate = useNavigate();
@@ -20,7 +17,6 @@ function LoginPage() {
         try {
             const resultAction = await dispatch(loginThunk(phoneNo));
 
-            // resultAction will have payload or error
             if (loginThunk.fulfilled.match(resultAction)) {
                 toast.success('OTP sent successfully');
 
