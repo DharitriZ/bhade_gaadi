@@ -11,6 +11,9 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { persistor } from './store';
 import DashboardLayout from './Component/Layout/DashboardLayout';
 import { ReviewDocuments } from './Component/Documents';
+import RejectedDocuments from './Component/RejectedDocuments';
+import ApprovedDocuments from './Component/ApprovedDocuments';
+import Dashboard from './Component/Dashboard';
 
 const App: React.FC = () => {
   return (
@@ -28,10 +31,7 @@ const App: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <DashboardLayout>
-                    <div className="p-4">
-                      <h1 className="text-2xl font-bold text-[#1E3A8A]">Dashboard</h1>
-                      {/* Add your dashboard content here */}
-                    </div>
+                    <Dashboard />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
@@ -52,6 +52,26 @@ const App: React.FC = () => {
                 <ProtectedRoute>
                   <DashboardLayout>
                     <ReviewDocuments />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/rejected-documents"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <RejectedDocuments />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/approved-documents"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <ApprovedDocuments />
                   </DashboardLayout>
                 </ProtectedRoute>
               }

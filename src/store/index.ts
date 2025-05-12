@@ -5,19 +5,20 @@ import storage from 'redux-persist/lib/storage';
 import authReducer from '../store/slices/authSlice';
 import carTypeReducer from '../store/slices/carTypeSlice';
 import documentReducer from '../store/slices/documentSlice'
-
+import dashboardReducer from '../store/slices/dashboardSlice';
 // Configuration for redux-persist
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['auth', 'carType', "document"],
+    whitelist: ['auth', 'carType', "document", "dashboard"],
 };
 
 // Combine reducers
 const rootReducer = combineReducers({
     auth: authReducer,
     carType: carTypeReducer,
-    document: documentReducer
+    document: documentReducer,
+    dashboard: dashboardReducer
 });
 
 // Create persisted reducer

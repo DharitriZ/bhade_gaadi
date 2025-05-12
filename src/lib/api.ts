@@ -2,8 +2,8 @@ import axios from "axios";
 import { store } from '../store/index';
 import { logoutAction } from "../store/actions/auth";
 
-export const ipURL = "http://192.168.1.34:3001";
-const localURl = "http://192.168.1.34:3001/api";
+export const ipURL = "http://192.168.1.9:3001";
+const localURl = "http://192.168.1.9:3001/api";
 const baseURl = "https://d2c2-43-250-157-147.ngrok-free.app/api";
 
 const API = axios.create({

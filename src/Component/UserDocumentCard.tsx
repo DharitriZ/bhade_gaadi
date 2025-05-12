@@ -17,11 +17,12 @@ export type User = {
 
 type Props = {
     user: User;
-    onApprove: (docId: string) => void;
-    onReject: (docId: string, reason: string) => void;
+    onApprove?: (docId: string) => void;
+    onReject?: (docId: string, reason: string) => void;
+    status: string;
 };
 
-export const UserDocumentCard: React.FC<Props> = ({ user, onApprove, onReject }) => {
+export const UserDocumentCard: React.FC<Props> = ({ user, onApprove, onReject, status }) => {
     const [rejectDocId, setRejectDocId] = useState<string | null>(null);
     const [reason, setReason] = useState("");
     const modalRef = useRef<HTMLDivElement | null>(null);
@@ -46,7 +47,7 @@ export const UserDocumentCard: React.FC<Props> = ({ user, onApprove, onReject })
 
     const handleConfirmReject = () => {
         if (rejectDocId) {
-            onReject(rejectDocId, reason);
+            onReject?.(rejectDocId, reason);
             setRejectDocId(null);
             setReason("");
         }
@@ -63,11 +64,11 @@ export const UserDocumentCard: React.FC<Props> = ({ user, onApprove, onReject })
                     </div>
                 </div>
 
-                {rejectDocId === null && (
-                    <div className="flex gap-2">
+                {rejectDocId === null && status === "PENDING" && (
+                    <div className="flex gap-2 sm:pt-0 pt-2">
                         <button
                             className="bg-[#1E3A8A] text-white px-3 py-1 rounded hover:bg-green-700 text-sm"
-                            onClick={() => onApprove(user.id)} // Approve the whole user card
+                            onClick={() => onApprove?.(user.id)} // Approve the whole user card
                         >
                             Approve
                         </button>

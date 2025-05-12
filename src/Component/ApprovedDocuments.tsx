@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { RootState, useAppDispatch, useAppSelector } from "../store";
-import { getPendingDocumentsAction, reviewDocumentAction } from "../store/actions/documents";
+import { getApprovedDocumentsAction } from "../store/actions/documents";
 import { UserDocumentCard } from "./UserDocumentCard";
 import { User } from "./UserDocumentCard";
 import { debounce } from "lodash";
 import { toast } from "react-toastify";
 
-export const ReviewDocuments = () => {
+const ApprovedDocuments: React.FC = () => {
     const dispatch = useAppDispatch();
-    const { pendingDocuments, pendingPagination } = useAppSelector(
+    const { approvedDocuments, approvedPagination } = useAppSelector(
         (state: RootState) => state.document
     );
 
@@ -17,49 +17,24 @@ export const ReviewDocuments = () => {
     const [loading, setLoading] = useState(false);
 
 
-    console.log(pendingPagination, 'pendingPagination');
 
     // Use useCallback to memoize the debounced search function
     const handleSearch = useCallback(
         debounce((search: string) => {
             setPage(1); // Reset to the first page when search changes
-            dispatch(getPendingDocumentsAction({ search, page: 1, pageSize: 10, }));
+            dispatch(getApprovedDocumentsAction({ search, page: 1, pageSize: 10, }));
         }, 1000),
         [] // Ensure this is only created once
     );
 
     const handlePageChange = (newPage: number) => {
         setPage(newPage);
-        dispatch(getPendingDocumentsAction({ search: searchTerm, page: newPage, pageSize: 10 }));
+        dispatch(getApprovedDocumentsAction({ search: searchTerm, page: newPage, pageSize: 10 }));
     };
-
-
-    const handleApprove = (docId: string) => {
-        try {
-            dispatch(reviewDocumentAction({ id: docId, status: "APPROVED" }));
-            dispatch(getPendingDocumentsAction({ search: searchTerm, page: 1, pageSize: 10 }));
-            toast.success("Document approved successfully");
-        } catch (error) {
-            console.error("Error approving document:", error);
-            toast.error(error.message || "An error occurred while approving the document");
-        }
-    };
-
-    const handleReject = (docId: string, reason: string) => {
-        try {
-            dispatch(reviewDocumentAction({ id: docId, status: "REJECTED", rejectionReason: reason }));
-            dispatch(getPendingDocumentsAction({ search: searchTerm, page: 1, pageSize: 10 }));
-            toast.success("Document rejected successfully");
-        } catch (error) {
-            console.error("Error rejecting document:", error);
-            toast.error(error.message || "An error occurred while rejecting the document");
-        }
-    }
-
 
     useEffect(() => {
         // Dispatch to fetch documents initially
-        dispatch(getPendingDocumentsAction({ search: searchTerm, page, pageSize: 10 }));
+        dispatch(getApprovedDocumentsAction({ search: searchTerm, page, pageSize: 10 }));
     }, [dispatch, page]);
 
     return (
@@ -79,24 +54,22 @@ export const ReviewDocuments = () => {
 
             {loading && <div>Loading...</div>}
 
-            {Array.isArray(pendingDocuments) && pendingDocuments.length === 0 ? (
+            {Array.isArray(approvedDocuments) && approvedDocuments.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-64 text-gray-500">
-                    <p className="text-lg font-medium">No pending documents found</p>
+                    <p className="text-lg font-medium">No approved documents found</p>
                     <p className="text-sm mt-1">You're all caught up!</p>
                 </div>
             ) : (
-                Array.isArray(pendingDocuments) &&
-                pendingDocuments.map((user: User) => (
+                Array.isArray(approvedDocuments) &&
+                approvedDocuments.map((user: User) => (
                     <UserDocumentCard
                         key={user.id}
                         user={user}
-                        onApprove={handleApprove}
-                        onReject={handleReject}
-                        status="PENDING"
+                        status="APPROVED"
                     />
                 ))
             )}
-            {pendingPagination.totalPages > 1 && (
+            {approvedPagination.totalPages > 1 && (
                 <div className="mt-4 flex justify-between items-center">
                     <button
                         onClick={() => handlePageChange(page - 1)}
@@ -106,12 +79,12 @@ export const ReviewDocuments = () => {
                         Previous
                     </button>
                     <span>
-                        Page {page} of {pendingPagination.totalPages}
+                        Page {page} of {approvedPagination.totalPages}
                     </span>
 
                     <button
                         onClick={() => handlePageChange(page + 1)}
-                        disabled={page === pendingPagination.totalPages}
+                        disabled={page === approvedPagination.totalPages}
                         className="px-4 py-2 bg-blue-500 text-white rounded-md disabled:bg-gray-300"
                     >
                         Next
@@ -121,3 +94,5 @@ export const ReviewDocuments = () => {
         </div>
     );
 };
+
+export default ApprovedDocuments;

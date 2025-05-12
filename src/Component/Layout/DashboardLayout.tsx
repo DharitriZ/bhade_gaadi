@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { logoutAction } from '../../store/actions/auth';
-import { Car, FileText } from "lucide-react";
+import { Car, CheckCircle, FileText, XCircle } from "lucide-react";
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -42,6 +42,20 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             path: '/review-documents',
             icon: (
                 <FileText className="w-6 h-8 text-gray" />
+            ),
+        },
+        {
+            name: 'Rejected Documents',
+            path: '/rejected-documents',
+            icon: (
+                <XCircle className="w-6 h-8 text-gray" />
+            ),
+        },
+        {
+            name: 'Approved Documents',
+            path: '/approved-documents',
+            icon: (
+                <CheckCircle className="w-6 h-8 text-gray" />
             ),
         },
     ];

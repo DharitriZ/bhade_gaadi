@@ -4,16 +4,30 @@ import API from "../../lib/api";
 
 interface ReviewDocumentParams {
     id: string;
-    status: "APPROVED" | "REJECTED"; // match your `DocumentStatus` enum
+    status: "APPROVED" | "REJECTED";
     rejectionReason?: string;
 }
 
 export const getPendingDocumentsAction = createAsyncThunk(
     "documents/getAllPending",
     withToastForError(async ({ search, page, pageSize }: { search: string, page: number, pageSize: number }) => {
-        return await API.get("/documents/pending", {
-            params: { search, page, pageSize },
+        return await API.get("/documents", {
+            params: { search, page, pageSize, status: "PENDING" },
         }).then((res: any) => res.data);
+    })
+);
+
+export const getApprovedDocumentsAction = createAsyncThunk(
+    "documents/getAllApproved",
+    withToastForError(async ({ search, page, pageSize }: { search: string, page: number, pageSize: number }) => {
+        return await API.get("/documents", { params: { search, page, pageSize, status: "APPROVED" } }).then((res: any) => res.data);
+    })
+);
+
+export const getRejectedDocumentsAction = createAsyncThunk(
+    "documents/getAllRejected",
+    withToastForError(async ({ search, page, pageSize }: { search: string, page: number, pageSize: number }) => {
+        return await API.get("/documents", { params: { search, page, pageSize, status: "REJECTED" } }).then((res: any) => res.data);
     })
 );
 
@@ -26,7 +40,7 @@ export const reviewDocumentAction = createAsyncThunk(
                 payload["rejectionReason"] = rejectionReason;
             }
 
-            const response = await API.post(`/documents/${id}/review`, payload);
+            const response = await API.put(`/documents/${id}/review`, payload);
             return response.data;
         }
     )
