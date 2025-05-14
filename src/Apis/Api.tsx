@@ -3,6 +3,8 @@ import axios from "axios";
 export const LoginApi = '/auth/login';
 export const VerifyApi = '/auth/verify-login';
 export const ResendApi = '/auth/resend-otp';
+export const AllDocApi = '/documents';
+// export const DocUpdateApi = `/docum`;
 
 const baseUrl = 'http://192.168.1.9:3001/api';
 
@@ -17,7 +19,7 @@ const API = axios.create({
 
 API.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
-    console.log(token);
+    // console.log(token);
     if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
     }

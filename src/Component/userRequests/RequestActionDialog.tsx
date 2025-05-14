@@ -31,6 +31,13 @@ const RequestActionDialog: React.FC<Props> = ({ isOpen, onClose, onConfirm, type
     };
   }, [isOpen, onClose]);
 
+  useEffect(() => {
+    if (!isOpen) {
+      setReason('');
+    }
+  }, [isOpen]);
+
+
   if (!isOpen) return null;
 
   const isReject = type === 'reject';

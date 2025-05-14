@@ -3,10 +3,19 @@ export interface UserRequest {
   username: string;
   email: string;
   status: 'pending' | 'approved' | 'rejected';
-  documentUrl: string;
-  documentName: string;
-  documentType: string;
-  createdAt: string;
+  documents: {
+    id: string;
+    userId: string;
+    docType: string;
+    docUrl: string;
+    docStatus: "PENDING" | "APPROVED" | "REJECTED";
+    rejectionReason: string | null;
+    reviewBy: string | null;
+    reviewAt: string | null;
+    createdAt: string;
+    updatedAt: string;
+  }[];
+  // docType: string;
   rejectionReason?: string;
 }
 

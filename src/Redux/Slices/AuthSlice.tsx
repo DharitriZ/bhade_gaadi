@@ -1,4 +1,3 @@
-// src/Redux/Slices/AuthSlice.ts
 import { createSlice } from '@reduxjs/toolkit';
 import { loginThunk, resendOtpThunk, verifyOtpThunk } from '../Action/AuthAction';
 
