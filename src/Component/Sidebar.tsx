@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, Menu, X, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Users, Menu, X, ChevronRight, Car } from 'lucide-react';
 
 interface SidebarLinkProps {
     to: string;
@@ -48,7 +48,6 @@ const Sidebar: React.FC = () => {
 
     return (
         <>
-            {/* Mobile overlay when sidebar is open */}
             {!isCollapsed && (
                 <>
                     <div
@@ -61,14 +60,14 @@ const Sidebar: React.FC = () => {
                             }`}
                     >
                         <div className="flex items-center justify-between h-16 px-4 border-b border-cyan-800">
-                            {/* {!isCollapsed && ( */}
+
                             <h1 className="text-xl font-bold">Admin Panel</h1>
-                            {/* )} */}
+
                             <button
                                 onClick={() => setCollapsed(!isCollapsed)}
                                 className="p-2 rounded-lg hover:bg-cyan-900 transition-colors"
                             >
-                                {/* {isCollapsed ? <ChevronRight size={20} /> : <X size={20} />} */}
+
                             </button>
                         </div>
 
@@ -87,20 +86,27 @@ const Sidebar: React.FC = () => {
                                 isCollapsed={isCollapsed}
                                 setCollapsed={setCollapsed}
                             />
+                            <SidebarLink
+                                to="/cartype"
+                                icon={<Car size={20} />}
+                                label="Car Type"
+                                isCollapsed={isCollapsed}
+                                setCollapsed={setCollapsed}
+                            />
                         </div>
 
                         <div className="p-4 border-t border-cyan-900">
-                            {/* {!isCollapsed && ( */}
+
                             <div className="text-sm text-cyan-300">
                                 Admin Panel v1.0
                             </div>
-                            {/* )} */}
+
                         </div>
                     </aside>
                 </>
             )}
 
-            {/* Mobile toggle button */}
+
             <button
                 className="md:hidden fixed bottom-4 right-4 bg-cyan-500 text-white p-3 rounded-full shadow-lg z-10"
                 onClick={() => setCollapsed(!isCollapsed)}

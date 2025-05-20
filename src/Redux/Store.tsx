@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
 import authReducer from './Slices/AuthSlice';
 import docReducer from './Slices/RequestsSlice';
+import carReducer from './Slices/CarSlice';
 import {
     persistStore,
     persistReducer,
@@ -18,12 +19,13 @@ import storage from 'redux-persist/lib/storage'; // defaults to localStorage for
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['auth', 'doc'], // only auth will be persisted
+    whitelist: ['auth', 'doc', 'car'], // only auth will be persisted
 };
 
 const rootReducer = combineReducers({
     auth: authReducer,
     doc: docReducer,
+    car: carReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
