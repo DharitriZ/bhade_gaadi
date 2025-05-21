@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAdmin } from '../context/AdminContext';
 import { useAppDispatch, useAppSelector } from '../Redux/hooks';
 import { updateStatusThunk, viewDocThunk } from '../Redux/Action/DocReviewAction';
@@ -8,9 +8,11 @@ import RequestFilters from './userRequests/RequestFilters';
 import { DocumentUser } from '../types/Doc';
 
 const PAGE_SIZE = 10;
+const DEBOUNCE_DELAY = 500;
 
 const UserRequests: React.FC = () => {
-    // const { updateRequestStatus } = useAdmin();
+
+    // const controllerRef = useRef<AbortController | null>(null);
     const dispatch = useAppDispatch();
     const docState = useAppSelector((state) => state.doc);
 
@@ -18,10 +20,35 @@ const UserRequests: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
 
     const isLoading = docState.loading;
-
     const [documents, setDocuments] = useState<DocumentUser[]>([]);
 
-    // Fetch documents and setDocuments on mount...
+    const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    useEffect(() => {
+        if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
+        // if (controllerRef.current) controllerRef.current.abort();
+
+        // console.log(controllerRef.current)
+
+        debounceTimeoutRef.current = setTimeout(() => {
+            // const controller = new AbortController();
+            // controllerRef.current = controller;
+
+            dispatch(viewDocThunk({
+                page: currentPage,
+                pageSize: PAGE_SIZE,
+                search: filters.search,
+                status: filters.status,
+            }));
+        }, DEBOUNCE_DELAY);
+
+        return () => {
+            if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
+            // if (controllerRef.current) controllerRef.current.abort();
+        };
+    }, [dispatch, currentPage, filters]);
+
+
 
     const handleStatusUpdate = async (
         id: string,
@@ -31,25 +58,12 @@ const UserRequests: React.FC = () => {
     ) => {
         await dispatch(updateStatusThunk({ id: documentId!, status, rejectionReason: reason || '' }));
 
-        // Update local state immediately after dispatch
         setDocuments((prevDocs) =>
             prevDocs.map((doc) =>
                 doc.id === documentId ? { ...doc, docStatus: status.toUpperCase(), rejectionReason: reason || '' } : doc
             )
         );
     };
-
-
-    useEffect(() => {
-        dispatch(
-            viewDocThunk({
-                page: currentPage,
-                pageSize: PAGE_SIZE,
-                search: filters.search,
-                status: filters.status,
-            })
-        );
-    }, [dispatch, currentPage, filters]);
 
     const filteredRequests = docState.data.filter((user: DocumentUser) => {
         const searchLower = filters.search.toLowerCase();

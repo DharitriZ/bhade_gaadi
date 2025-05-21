@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as Yup from 'yup';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useAppDispatch, useAppSelector } from '../Redux/hooks';
@@ -10,8 +10,10 @@ function CarTypePage() {
 
     const dispatch = useAppDispatch();
     const carTypes = useAppSelector(state => state.car);
+    // const controllerRef = useRef<AbortController | null>(null);
 
     useEffect(() => {
+
         dispatch(AllCarAction());
     }, [dispatch]);
 
@@ -23,12 +25,11 @@ function CarTypePage() {
     const handleDeactivate = (id: string) => {
         console.log("Deactivate ID:", id);
         dispatch(DeleteCarAction({ id }));
-        // Dispatch deactivate API here
     };
 
     const handleEdit = (car: any) => {
         setEditData({ id: car.id, type: car.name, description: car.description });
-        // dispatch(UpdateCarAction({ id: car.id, type: car.name, description: car.description }))
+        // dispatch(UpdateCarAction({ id: car.id, name: car.name, description: car.description }))
         setShowForm(true);
     };
 
@@ -38,7 +39,7 @@ function CarTypePage() {
     };
 
     return (
-        <div className="relative">
+        <div className="relative h-full">
             <header className="mb-6">
                 <h1 className="text-2xl font-bold text-gray-800">Car Type</h1>
                 <p className="text-gray-600 mt-1">Add type of car available.</p>
@@ -55,7 +56,7 @@ function CarTypePage() {
 
             {/* Overlay Form Section */}
             {showForm && (
-                <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                <div className="absolute w-full h-full inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-md shadow-lg w-full max-w-md relative">
                         <Formik
                             initialValues={{
@@ -66,6 +67,7 @@ function CarTypePage() {
                             validationSchema={CarTypeSchema}
                             onSubmit={async (values, { resetForm }) => {
                                 if (editData) {
+                                    // handleEdit(values);
                                     await dispatch(UpdateCarAction({ id: editData.id, name: values.type, description: values.description }));
                                 } else {
                                     await dispatch(CarTypeAction(values));

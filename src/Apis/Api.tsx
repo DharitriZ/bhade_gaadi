@@ -1,14 +1,14 @@
 import axios from "axios";
 
-export const LoginApi = '/auth/login';
-export const VerifyApi = '/auth/verify-login';
+export const LoginApi = '/auth/admin/login';
+export const VerifyApi = '/auth/admin/verify-login';
 export const ResendApi = '/auth/resend-otp';
 export const AllDocApi = '/documents';
 export const AddCarApi = '/car-types';
 // export const AllCarApi = '/car-types';
 // export const DocUpdateApi = `/docum`;
 
-const baseUrl = 'https://b255-2401-4900-1f3f-ae2d-8db3-f547-c1ef-f687.ngrok-free.app/api';
+const baseUrl = 'http://192.168.1.9:3002/api';
 
 
 const API = axios.create({

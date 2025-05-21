@@ -7,16 +7,13 @@ export const viewDocThunk = createAsyncThunk<ApiResponse<DocumentResponse>, Docu
     'documents/view',
     isApiResponse(async ({ page, pageSize, search, status }) => {
         const response = await API.get<ApiResponse<DocumentResponse>>(AllDocApi, {
-            params: { page, pageSize, search, status },
+            params: { page, pageSize, search, status }
         });
 
         // console.log(response.data);
         return response.data;
     })
 );
-
-
-
 
 export const updateStatusThunk = createAsyncThunk<ApiResponse<UpdateStatusData>, { id: string; status: string; rejectionReason?: string }>(
     'documents/updateStatus',
